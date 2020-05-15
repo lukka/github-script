@@ -5,10 +5,11 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - id: output-set
-        uses: actions/github-script@master
+        uses: lukka/github-script@master
         with:
-          script: return core.getInput('input-value')
+          script: ${{ github.workspace }}/__test__/script.js
           result-encoding: string
           input-value: output
       - run: |

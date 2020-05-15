@@ -1,0 +1,1 @@
+return core.getInput('input-value')

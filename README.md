@@ -4,8 +4,8 @@ This action makes it easy to quickly write a script in your workflow that
 uses the GitHub API and the workflow run context.
 
 In order to use this action, a `script` input is provided. The value of that
-input should be the body of an asynchronous function call. The following
-arguments will be provided:
+input should be the file path that contains the body of an asynchronous function call. 
+The following arguments will be provided:
 
 - `github` A pre-authenticated
   [octokit/rest.js](https://github.com/octokit/rest.js) client
@@ -13,7 +13,7 @@ arguments will be provided:
   run](https://github.com/actions/toolkit/tree/master/packages/github)
 - `core` A reference to the [@actions/core](https://github.com/actions/toolkit/tree/master/packages/core) package
 
-Since the `script` is just a function body, these values will already be
+Since the file specified by `script` contains just a function body, these values will already be
 defined, so you don't have to (see examples below).
 
 See [octokit/rest.js](https://octokit.github.io/rest.js/) for the API client
@@ -44,11 +44,15 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@0.9.0
+      - uses: lukka/github-script@master
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
+          script: ${{ github.workspace }}/script.js
+```
+
+File `script.js`:
+```js 
+          github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -70,7 +74,11 @@ jobs:
       - uses: actions/github-script@0.9.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
+          script: ${{ github.workspace }}/script.js
+```
+
+File `script.js`:
+```js
             github.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -91,7 +99,11 @@ jobs:
       - uses: actions/github-script@0.9.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
+          script: ${{ github.workspace }}/script.js
+```
+
+File `script.js`:
+```js
             // Get a list of all issues created by the PR opener
             // See: https://octokit.github.io/rest.js/#pagination
             const creator = context.payload.sender.login
@@ -135,7 +147,11 @@ jobs:
       - uses: actions/github-script@0.9.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
+          script: ${{ github.workspace }}/script.js
+```
+
+File `script.js`:
+```js
             const diff_url = context.payload.pull_request.diff_url
             const result = await github.request(diff_url)
             console.log(result)
@@ -155,6 +171,10 @@ output of a github-script step. For some workflows, string encoding is preferred
   with:
     github-token: ${{secrets.GITHUB_TOKEN}}
     result-encoding: string
-    script: |
+    script: ${{ github.workspace }}/script.js
+```
+
+File `script.js`:
+```js
       return "I will be string (not JSON) encoded!"
 ```

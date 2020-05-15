@@ -1,4 +1,9 @@
 import {callAsyncFunction} from '../src/async-function'
+import * as fs from 'fs'
+import { mocked } from 'ts-jest/utils'; 
+
+jest.mock('fs');
+mocked(fs.readFileSync).mockImplementation(path => Buffer.from(path as string, "utf8"))
 
 describe('callAsyncFunction', () => {
   test('calls the function with its arguments', async () => {

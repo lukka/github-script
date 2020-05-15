@@ -5,7 +5,8 @@
   "author": "GitHub",
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@actions/github": "^2.2.0"
+    "@actions/github": "^2.2.0",
+    "@types/node": "14.0.1"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
